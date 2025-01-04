@@ -1,6 +1,10 @@
 #pylint: disable=missing-docstring
 #pylint: disable=unspecified-encoding
+import tracemalloc
 import discord
+
+tracemalloc.start()
+
 
 def get_token_id():
     with open('discord_token_id.txt', 'r') as token_file: # bot's token
