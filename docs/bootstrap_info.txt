@@ -1,0 +1,9 @@
+Use Bootstrap CDN
+Open your HTML files in the /docs folder.
+Add the following lines in the <head> section of each file to include Bootstrap CSS and JS:
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Optional JavaScript (use with Popper for interactive components) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
