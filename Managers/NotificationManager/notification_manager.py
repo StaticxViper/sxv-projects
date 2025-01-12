@@ -1,22 +1,26 @@
 #pylint: disable=missing-docstring
 #pylint: disable=unspecified-encoding
 import tracemalloc
+import os
 import discord
 
 tracemalloc.start()
 
 
 def get_token_id():
-    with open('discord_token_id.txt', 'r') as token_file: # bot's token
-        return token_file.read()
+    return os.environ.get('DISCORD_TOKEN_ID')
+    #with open('discord_token_id.txt', 'r') as token_file: # bot's token
+        #return token_file.read()
 
 def get_channel_id():
-    with open('discord_channel_id.txt', 'r') as channel_file: # Target chanel
-        return channel_file.read()
+    return os.environ.get('DISCORD_CHANNEL_ID')
+    #with open('discord_channel_id.txt', 'r') as channel_file: # Target chanel
+        #return channel_file.read()
 
 def get_user_id():
-    with open('discord_user_id.txt', 'r') as user_file: #Target user
-        return user_file.read()
+    return os.environ.get('DISCORD_USER_ID')
+    #with open('discord_user_id.txt', 'r') as user_file: #Target user
+        #return user_file.read()
 
 #Some fuctions in this class use 'await' so that other tasks
 # can be excuted in the background while the function completes
