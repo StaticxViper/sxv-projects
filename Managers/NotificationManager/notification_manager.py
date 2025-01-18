@@ -7,20 +7,7 @@ import discord
 tracemalloc.start()
 
 
-def get_token_id():
-    return os.environ.get('DISCORD_TOKEN_ID')
-    #with open('discord_token_id.txt', 'r') as token_file: # bot's token
-        #return token_file.read()
 
-def get_channel_id():
-    return os.environ.get('DISCORD_CHANNEL_ID')
-    #with open('discord_channel_id.txt', 'r') as channel_file: # Target chanel
-        #return channel_file.read()
-
-def get_user_id():
-    return os.environ.get('DISCORD_USER_ID')
-    #with open('discord_user_id.txt', 'r') as user_file: #Target user
-        #return user_file.read()
 
 #Some fuctions in this class use 'await' so that other tasks
 # can be excuted in the background while the function completes
@@ -28,29 +15,65 @@ def get_user_id():
 
 class MyClient(discord.Client):
 
-    TOKEN = get_token_id()
-    CHANNEL_ID = get_channel_id()
-    USER_ID = get_user_id()
+    def __init__(self):
+        self.instents = discord.Intents.default()
+        super().__init__(intents=self.instents)
 
-    async def send_channel_message(self, message='Empty Message', channel_id=CHANNEL_ID):
+        self.TOKEN = self.get_token_id()
+        self.CHANNEL_ID = self.get_channel_id()
+        self.USER_ID = self.get_user_id()
+
+    def get_token_id(self):
+        result = os.environ.get('DISCORD_TOKEN_ID')
+        print(f'DEBUG: {result}')
+        return result
+
+    def get_channel_id(self):
+        result = os.environ.get('DISCORD_CHANNEL_ID')
+        print(f'DEBUG: {result}')
+        return result
+
+    def get_user_id(self):
+        result = os.environ.get('DISCORD_USER_ID')
+        print(f'DEBUG: {result}')
+        return result
+
+
+    async def on_ready(self):
+        print(f'Logged in as {self.user}')
+
+        await self.send_user_message('Test message sent by Raspberry Pi via Notification Manager')
+        await self.send_channel_message('Message sent by Raspberry Pi via Notification Manager')
+
+    async def send_channel_message(self, message='Empty Message', channel_id=''):
         #print(f'Logged in as {self.user}')
-        channel = self.get_channel(channel_id)
-        if channel:
-            await channel.send(message)
-        await self.close()  # Close the bot after sending the message
+        try:
+            if not channel_id:
+                channel_id = self.CHANNEL_ID
+            channel = await self.fetch_channel(channel_id)
+            if channel:
+                await channel.send(message)
+            else:
+                print(f"Channel with ID {channel_id} does not exist.")
+            await self.close()  # Close the bot after sending the message
+        except discord.Forbidden:
+            print("Bot lacks permission to send messages in the target channel.")
+        except discord.NotFound:
+            print(f"Channel with ID {self.CHANNEL_ID} does not exist.")
+        except discord.HTTPException as hexc:
+            print(f"Failed to send message due to an HTTP exception: {hexc}")
 
     #user
-    async def send_user_message(self, message='Empty Message', user_id=USER_ID):
+    async def send_user_message(self, message='Empty Message', user_id=''):
         #print(f'Logged in as {self.user}')
+        if not user_id:
+            user_id = self.USER_ID
         user = await self.fetch_user(user_id)
         if user:
             await user.send(message)
         await self.close()  # Close the bot after sending the message
 
 if __name__ == "__main__":
-    test_client = MyClient(intents=discord.Intents.default())
-    test_client.run(get_token_id())
 
-    test_client.send_user_message('Test message sent by Raspberry Pi via Notification Manager')
-    test_client.send_channel_message('Test message sent by Raspberry Pi via Notification Manager')
-    
+    test_client = MyClient()
+    test_client.run(test_client.TOKEN)
