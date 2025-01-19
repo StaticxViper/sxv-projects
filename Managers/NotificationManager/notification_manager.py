@@ -25,17 +25,14 @@ class MyClient(discord.Client):
 
     def get_token_id(self):
         result = os.environ.get('DISCORD_TOKEN_ID')
-        print(f'DEBUG: {result}')
         return result
 
     def get_channel_id(self):
         result = os.environ.get('DISCORD_CHANNEL_ID')
-        print(f'DEBUG: {result}')
         return result
 
     def get_user_id(self):
         result = os.environ.get('DISCORD_USER_ID')
-        print(f'DEBUG: {result}')
         return result
 
 
