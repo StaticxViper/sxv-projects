@@ -3,71 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Tracker</title>
-    <!-- Bootstrap CSS -->
+    <title>Log Viewer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .log-box {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            font-family: monospace;
+            overflow-y: scroll;
+            padding: 10px;
+            white-space: pre-wrap;
+            display: none; /* Initially hidden */
+        }
+    </style>
 </head>
-<body>
-    <div class="container mt-4">
-        <header class="text-center mb-4">
-            <h1>Device Status Tracker</h1>
-            <p class="text-muted">Monitor the status of your devices and view logs below</p>
-        </header>
+<body class="p-4">
+    <h1 class="mb-4">Log Viewer</h1>
 
-        <!-- Status Table -->
-        <div class="mb-4">
-            <h3>Device Status</h3>
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Device Name</th>
-                        <th>Status</th>
-                        <th>Last Updated</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Device A</td>
-                        <td><span class="badge bg-success">Online</span></td>
-                        <td>2025-01-19 10:00 AM</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Device B</td>
-                        <td><span class="badge bg-danger">Offline</span></td>
-                        <td>2025-01-19 09:45 AM</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Device C</td>
-                        <td><span class="badge bg-warning">Maintenance</span></td>
-                        <td>2025-01-19 09:30 AM</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Logs Section -->
-        <div class="mb-4">
-            <h3>Logs</h3>
-            <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#logSection" aria-expanded="false" aria-controls="logSection">
-                Toggle Logs
-            </button>
-            <div class="collapse" id="logSection">
-                <div class="card card-body">
-                    <pre>
-                        [2025-01-19 10:00 AM] Device A: Online
-                        [2025-01-19 09:45 AM] Device B: Offline
-                        [2025-01-19 09:30 AM] Device C: Maintenance
-                    </pre>
-                </div>
-            </div>
-        </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" onclick="loadLogs('/logs/test_log1.txt')">View Log 1</button>
+        <button class="btn btn-primary" onclick="loadLogs('/logs/test_log2.txt')">View Log 2</button>
+        <button class="btn btn-primary" onclick="loadLogs('logfile3.txt')">View Log 3</button>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <textarea id="log-box" class="log-box" readonly>
+Logs will appear here...
+    </textarea>
+
+    <script>
+        async function loadLogs(logFilePath) {
+            try {
+                // Fetch the log file from the specified path
+                const response = await fetch(logFilePath);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                
+                const logContent = await response.text(); // Get file content as text
+                const logLines = logContent.trim().split('\n'); // Split the content into lines
+                const last10Lines = logLines.slice(-10).join('\n'); // Get the last 10 lines
+
+                // Display the log content in the log-box
+                const logBox = document.getElementById('log-box');
+                logBox.style.display = 'block';
+                logBox.value = last10Lines;
+            } catch (error) {
+                alert(`Error loading log file: ${error.message}`);
+                document.getElementById('log-box').style.display = 'none'; // Hide log box on error
+            }
+        }
+    </script>
 </body>
 </html>

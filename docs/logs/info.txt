@@ -1,0 +1,1 @@
+Have Logs Manager and other logs point to this directory to show on dashboard
