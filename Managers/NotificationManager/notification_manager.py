@@ -23,6 +23,9 @@ class MyClient(discord.Client):
         self.CHANNEL_ID = self.get_channel_id()
         self.USER_ID = self.get_user_id()
 
+        self.user_message = None
+        self.channel_message = None
+
     def get_token_id(self):
         result = os.environ.get('DISCORD_TOKEN_ID')
         return result
@@ -38,9 +41,10 @@ class MyClient(discord.Client):
 
     async def on_ready(self):
         print(f'Logged in as {self.user}')
-
-        await self.send_user_message('Test message sent by Raspberry Pi via Notification Manager')
-        await self.send_channel_message('Message sent by Raspberry Pi via Notification Manager')
+        if self.user_message:
+            await self.send_user_message(self.user_message)
+        elif self.channel_message:
+            await self.send_channel_message(self.channel_message)
 
     async def send_channel_message(self, message='Empty Message', channel_id=''):
         #print(f'Logged in as {self.user}')
@@ -73,4 +77,5 @@ class MyClient(discord.Client):
 if __name__ == "__main__":
 
     test_client = MyClient()
+    test_client.user_message = 'TEST'
     test_client.run(test_client.TOKEN)

@@ -1,2 +1,5 @@
 test_log.txt
+*log.txt
 *_PRIVATE.txt
+
+__pycache__/
