@@ -20,14 +20,14 @@ class UpdateManager():
     def update_raspberry_pi(self):
         """ Update the Raspberry Pi """
         try:
-            #subprocess.run(['sudo', 'apt', 'get', 'update'], check=True)
-            #subprocess.run(['sudo', 'apt', 'get', 'upgrade', '-y'], check=True)
+            subprocess.run(['sudo', 'apt-get', 'update'], check=True)
+            subprocess.run(['sudo', 'apt-get', 'upgrade', '-y'], check=True)
             self.log.write_to_file(self, '/home/pi/1.Repos/sxv-projects/docs/logs/update_log.txt', "Raspberry Pi updated successfully")
             self.notif.user_message = 'Update successful!'
             self.notif.run(self.notif.TOKEN)
         except subprocess.CalledProcessError as cpe:
             self.log.write_to_file(self, '/home/pi/1.Repos/sxv-projects/docs/logs/update_log.txt', f"Failed to update Raspberry Pi due to error: {cpe}")
-            error_message = 'Failed to update Raspberry Pi due to an error...'
+            error_message = f'Failed to update Raspberry Pi due to an error... {cpe}'
             self.notif.user_message = error_message
             self.notif.run(self.notif.TOKEN)
 
@@ -39,10 +39,13 @@ class UpdateManager():
                 self.log.write_to_file(self, location, "Update successful!")
             else:
                 self.log.write_to_file(self, '/home/pi/1.Repos/sxv-projects/docs/logs/update_log.txt', "Update successful!")
-            #await self.notif.send_user_message(message="Update successful!")
+            self.notif.user_message = 'Update successful!'
+            self.notif.run(self.notif.TOKEN)
         except subprocess.CalledProcessError as cpe:
             self.log.write_to_file(self, '/home/pi/1.Repos/sxv-projects/docs/logs/update_log.txt', f"Failed to update due to error: {cpe}")
-            #await self.notif.
+            error_message = 'Failed to update...'
+            self.notif.user_message = error_message
+            self.notif.run(self.notif.TOKEN)
 
 if __name__ == "__main__":
     test_instance = UpdateManager()
