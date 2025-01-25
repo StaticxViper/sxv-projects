@@ -13,20 +13,6 @@ import psutil
 from Managers.LogManager.log_manager import LogManager
 from Managers.NotificationManager.notification_manager import MyClient
 
-#CPU Usage
-#Memory Usage
-#Disk Usage
-
-#System Temp
-
-#Bandwidth Usage
-#Network Ping/Latency
-
-#Power supply voltage
-#
-#Bonus:
-#Scheduled CRON JOBS
-
 class DeviceMonitor():
     """ Monitor the Raspberry Pi and other devices """
 
