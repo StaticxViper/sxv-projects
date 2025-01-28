@@ -3,3 +3,4 @@ test_log.txt
 *_PRIVATE.txt
 
 __pycache__/
+.venv/
