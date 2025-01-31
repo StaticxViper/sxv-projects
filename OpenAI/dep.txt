@@ -1,0 +1,5 @@
+Flask for building your web app.
+openai for communicating with the OpenAI API.
+beautifulsoup4 for scraping data.
+requests for making HTTP requests.
+python-dotenv for loading environment variables (e.g., API keys).
